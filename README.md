@@ -12,4 +12,5 @@ $ docker-compose up --build -d
 $ docker run -it [image名] bash
 $ docker-compose up --build
 $ docker-compose up -d
+$ docker-compose exec mysql_db bash
 ```
