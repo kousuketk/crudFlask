@@ -3,5 +3,13 @@
 ### how to run
 
 ```
-$ python3 hello.py
+$ docker-compose up --build -d
+```
+
+### memo
+
+```
+$ docker run -it [image名] bash
+$ docker-compose up --build
+$ docker-compose up -d
 ```
