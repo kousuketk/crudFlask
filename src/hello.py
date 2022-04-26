@@ -1,11 +1,22 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import pymysql
 
 app = Flask(__name__)
 
 
-@app.route("/")
-def hello():
+@app.route("/hello/<name>")
+def hello(name=None):
+    return render_template("hello.html", title="flask test", name=name)
+
+
+@app.route("/hello")
+def hello2():
+    name = request.args.get("name")
+    return render_template("hello.html", title="flask test", name=name)
+
+
+@app.route("/users")
+def users():
     db = pymysql.connect(
         host="crudflask_mysql_db_1",
         user="user",
@@ -20,12 +31,12 @@ def hello():
     users = cur.fetchall()
     cur.close()
     db.close()
-    return render_template("hello.html", title="flask test", users=users)
+    return render_template("users.html", title="flask test", users=users)
 
 
-@app.route("/good")
+@app.route("/health")
 def good():
-    name = "Good"
+    name = "health"
     return name
 
 
