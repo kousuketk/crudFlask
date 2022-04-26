@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import pymysql
 
 app = Flask(__name__)
@@ -17,14 +17,7 @@ def hello2():
 
 @app.route("/users")
 def users():
-    db = pymysql.connect(
-        host="crudflask_mysql_db_1",
-        user="user",
-        password=("password"),
-        db="testdb",
-        charset="utf8",
-        cursorclass=pymysql.cursors.DictCursor,
-    )
+    db = getConnection()
     cur = db.cursor()
     sql = "select * from users"
     cur.execute(sql)
@@ -34,10 +27,33 @@ def users():
     return render_template("users.html", title="flask test", users=users)
 
 
+@app.route("/api/users")
+def usersApi():
+    db = getConnection()
+    cur = db.cursor()
+    sql = "select * from users"
+    cur.execute(sql)
+    users = cur.fetchall()
+    cur.close()
+    db.close()
+    return jsonify({"status": "OK", "users": users})
+
+
 @app.route("/health")
 def good():
     name = "health"
     return name
+
+
+def getConnection():
+    return pymysql.connect(
+        host="crudflask_mysql_db_1",
+        user="user",
+        password=("password"),
+        db="testdb",
+        charset="utf8",
+        cursorclass=pymysql.cursors.DictCursor,
+    )
 
 
 if __name__ == "__main__":
